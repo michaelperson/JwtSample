@@ -49,9 +49,36 @@ namespace JwtSample
                 
                 );
             services.AddControllers();
+           
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "JwtSample For TechniBestDev", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                     Name="Authorization",
+                     Type = SecuritySchemeType.Http,
+                     Scheme="bearer", //!!!!!LOWERCASE!!!!!
+                     BearerFormat="JWT", //!!!UPPERCASE!!!!
+                     In= ParameterLocation.Header, //Dans le Header Http
+                     
+                     Description = "JWT Bearer : \r\n Enter  Token"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                      {
+                          new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = JwtBearerDefaults.AuthenticationScheme
+                                }
+                            },
+                            new string[] {}
+
+                    }
+
+                });
             });
         }
 
